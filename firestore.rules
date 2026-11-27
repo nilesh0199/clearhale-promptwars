@@ -1,0 +1,35 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions for validation
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidProfileData(data) {
+      return data.keys().hasAll(['household', 'language', 'city', 'consentAt', 'consentVersion']) &&
+             data.language is string && data.language.size() <= 10 &&
+             data.consentVersion is string && data.consentVersion.size() <= 10 &&
+             data.consentAt is string && data.consentAt.size() <= 40 &&
+             data.city is map && data.city.name is string && data.city.name.size() <= 100 &&
+             data.household is map;
+    }
+
+    // Only allow users to read and write their own profile document
+    match /users/{userId}/profile/{docId} {
+      allow read: if isOwner(userId);
+      allow create, update: if isOwner(userId) && isValidProfileData(request.resource.data);
+      allow delete: if isOwner(userId);
+    }
+
+    // Explicitly deny everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

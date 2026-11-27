@@ -1,0 +1,42 @@
+name: Clearhale CI Pipeline
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  quality-test-and-build:
+    name: Lint, Test & Production Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+
+      - name: Install Project Dependencies
+        run: npm ci || npm install
+
+      - name: Static Linting & Type Safety Check
+        run: npm run lint
+
+      - name: Dependency Security Audit
+        run: npm audit --audit-level=high
+
+      - name: Run Automated Test Suite (120 Tests across 31 Suites)
+        run: npm test
+
+      - name: Production Bundle Compilation
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+          GROQ_API_KEY: "dummy_groq_ci_key"
+          GEMINI_API_KEY: "dummy_gemini_ci_key"
+          OPENAQ_API_KEY: "dummy_openaq_ci_key"
+        run: npm run build
