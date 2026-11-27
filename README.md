@@ -2,7 +2,7 @@
 
 **Breathe clearer, one smart choice at a time: an offline-first clean air intelligence platform and plain-language air guide for families in India.**
 
-[Live Application Demo](https://clearhale-vercel.vercel.app/) • [Walkthrough Video](https://clearhale-vercel.vercel.app/) • [LinkedIn Project Post](https://clearhale-vercel.vercel.app/)
+[Live Application Demo](https://clearhale-vercel.vercel.app/) • [Walkthrough Video](https://www.youtube.com/watch?v=lGcJ2hVKRLY) • [LinkedIn Project Post](https://lnkd.in/p/d4GAECYe)
 
 <p align="center">
   <img src="docs/screenshots/01-home-desktop.png" width="820" alt="Clearhale Desktop Dashboard with 24-Hour Forecast & Clean Air Guidance" />
